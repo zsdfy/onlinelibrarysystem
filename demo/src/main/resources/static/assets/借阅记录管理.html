@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>借阅记录管理</title>
+  <link rel="stylesheet" href="../css/adminnavbar.css">
+  <link rel="stylesheet" href="../css/借阅记录.css">
+</head>
+
+<body>
+  <!-- 顶部导航 -->
+  <div class="top_ele">
+    <ul class="top_navs">
+      <li class="admin-title">
+        <!-- <span class="line left"></span> -->
+        <span class="title-text">借阅记录管理</span>
+        <!-- <span class="line right"></span> -->
+      </li>
+      <li class="exit">
+        <!-- <span class="line left"></span> -->
+        <a href="./index.html">退出登录</a>
+        <!-- <span class="line right"></span> -->
+      </li>
+    </ul>
+  </div>
+
+  <!-- 侧边栏 -->
+  <nav class="navbar">
+    <ul class="navbar-nav">
+      <li class="logo">
+        <a href="#" class="nav-link" id="toggle">
+          <span class="link-text">BOOK</span>
+          <img src="https://img.icons8.com/fluency/48/cms.png" class="icon" />
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./图书管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/library-building.png" class="icon" />
+          <span class="link-text">图书管理</span>
+        </a>
+        <!-- <span class="link-text">借阅图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./读者管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/reading.png" class="icon" />
+          <span class="link-text">读者管理</span>
+        </a>
+        <!-- <span class="link-text">推荐图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./借阅记录管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/record.png" class="icon" />
+          <span class="link-text">借阅记录管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./统计分析.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/statistics.png" class="icon" />
+          <span class="link-text">统计分析</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./类别管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/category.png" class="icon" />
+          <span class="link-text">类别管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./库存管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/warehouse.png" class="icon" />
+          <span class="link-text">库存管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./修改密码.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/password.png" class="icon" />
+          <span class="link-text">修改密码</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./index.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/day-and-night.png" class="icon" />
+          <span class="link-text">更换</span>
+        </a>
+        <!-- <span class="link-text">更换</span> -->
+      </li>
+    </ul>
+  </nav>
+  <!-- <main>
+        <h2>图书推荐</h2>
+    </main> -->
+  <script src="../JS/iconbutton.js"></script>
+
+  <!-- 主内容 -->
+  <div class="main-content">
+    <div class="condition">
+
+      <!-- 借阅时间 -->
+      <div class="date-range">
+        <label>借阅时间</label>
+        <div class="date-picker">
+          <input type="date" id="startDate" placeholder="起始时间">
+          <span>至</span>
+          <input type="date" id="endDate" placeholder="结束时间">
+        </div>
+        <button class="search-now-btn" id="searchBtn">
+          <i class="fas fa-search"></i>立即查询
+        </button>
+      </div>
+
+      <!-- 状态筛选 -->
+      <div class="status-filter">
+        <label>借阅状态</label>
+        <select id="statusFilter">
+          <option value="all">全部</option>
+          <option value="borrowed">借阅中</option>
+          <option value="returned">已归还</option>
+          <option value="overdue">已逾期</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 借阅记录表格 -->
+    <div class="borrow-records">
+      <div class="records-header">
+        <h3>借阅记录</h3>
+        <div class="records-info">
+          <span>共<span id="totalRecords">0</span>条</span>
+          <span>每页显示
+            <select id="pageSize">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>条
+          </span>
+        </div>
+      </div>
+
+      <table class="records-table">
+        <thead>
+          <tr>
+            <th>书籍名</th>
+            <th>订阅者</th>
+            <th>馆藏数</th>
+            <th>是否归还</th>
+            <th>归还时间</th>
+            <th>借阅时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+
+        <tbody id="recordsBody">
+        </tbody>
+      </table>
+
+      <!-- 分页翻页 -->
+      <div class="pagination">
+        <button id="prevPage" disabled><i class="fas fa-angle-left"></i> </button>
+
+        <div class="page-numbers" id="pageNumbers"></div>
+        <button id="nextPage" disabled><i class="fas fa-angle-right"></i> </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 归还确认框 -->
+  <div id="returnModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>确认归还</h3>
+      <p>确认将<span id="returnBookTitle"></span>标记为归还? </p>
+      <div class="modal-actions">
+        <button id="confirmReturn" class="confirm-btn">确认</button>
+        <button id="cancelReturn" class="cancel-btn">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../JS/borrowRecord.js"></script>
+</body>
+
+</html>

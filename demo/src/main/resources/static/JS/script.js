@@ -1,116 +1,307 @@
-const info_btn = document.getElementsByClassName("info-btn");
-for(let i=0; i<info_btn.length; i++) {
-    info_btn[i].onclick =() =>{
-        document.querySelector(".container").classList.toggle("login-in")
-    }
+// 主入口函数
+document.addEventListener('DOMContentLoaded', function () {
+    // 初始化UI交互
+    initUI();
+
+    // 初始化登录功能
+    initLogin();
+
+    // 初始化注册功能
+    initRegister();
+
+    // 检查记住密码状态
+    checkRememberMe();
+});
+
+// 初始化UI交互
+function initUI() {
+    // 切换登录/注册表单
+    const infoBtns = document.querySelectorAll(".info-btn");
+    infoBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector(".container").classList.toggle("login-in");
+        });
+    });
+
+    // 密码显示/隐藏切换
+    const passwordInputs = document.querySelectorAll('input[type="password"]');
+    passwordInputs.forEach(input => {
+        const toggle = document.createElement('span');
+        toggle.className = 'toggle-password';
+        toggle.innerHTML = '👁️';
+        toggle.style.cursor = 'pointer';
+        toggle.style.position = 'absolute';
+        toggle.style.right = '10px';
+        toggle.style.top = '50%';
+        toggle.style.transform = 'translateY(-50%)';
+
+        input.parentNode.style.position = 'relative';
+        input.parentNode.appendChild(toggle);
+
+        toggle.addEventListener('click', () => {
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.innerHTML = '👁️‍🗨️';
+            } else {
+                input.type = 'password';
+                toggle.innerHTML = '👁️';
+            }
+        });
+    });
 }
 
-// 注册按钮点击事件
-document.getElementById('registerBtn').addEventListener('click', function() {
-    // 获取用户输入
-    const username = document.querySelector('input[name="fullname"]').value;
-    const password = document.querySelector('input[name="Username"]').value;
-    const confirmPassword = document.querySelector('input[name="Password"]').value;
-
-    // 校验密码是否一致
-    if (password !== confirmPassword) {
-        alert('两次输入的密码不一致！');
-        return;
-    }
-
-    // 发送POST请求到后端接口
-    fetch('/api/toRegister', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('注册成功！');
-                // 跳转到登录页面或刷新
-                window.location.href = '/login.html';
-            } else {
-                alert('注册失败：' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('请求错误:', error);
-        });
-});
-
-
-// 记住密码功能
-document.addEventListener('DOMContentLoaded', function() {
+// 初始化登录功能
+function initLogin() {
+    const loginBtn = document.querySelector('.login-in .btn');
+    const usernameInput = document.querySelector('.login-in input[name="Username"]');
+    const passwordInput = document.querySelector('.login-in input[name="Password"]');
     const rememberMe = document.getElementById('remember');
-    const username = document.querySelector('input[name="Username"]');
-    const password = document.querySelector('input[name="Password"]');
 
-    // 检查本地存储
-    if(localStorage.getItem('remember') === 'true') {
-        rememberMe.checked = true;
-        username.value = localStorage.getItem('username') || '';
-        password.value = localStorage.getItem('password') || '';
-    }
+    loginBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
 
-    // 登录按钮点击事件
-    document.querySelector('.login-in .btn').addEventListener('click', function(e) {
-        if(rememberMe.checked) {
-            localStorage.setItem('remember', 'true');
-            localStorage.setItem('username', username.value);
-            localStorage.setItem('password', password.value);
-        } else {
-            localStorage.removeItem('remember');
-            localStorage.removeItem('username');
-            localStorage.removeItem('password');
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        // 客户端验证
+        if (!username || !password) {
+            showAlert('请输入用户名和密码', 'error');
+            return;
         }
-        // 这里可以添加实际的登录逻辑
+
+        // 显示加载状态
+        const originalText = this.textContent;
+        this.textContent = '登录中...';
+        this.disabled = true;
+
+        try {
+            // 调用登录API
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // 登录成功处理
+                showAlert('登录成功', 'success');
+
+                // 存储token和用户信息
+                localStorage.setItem('authToken', result.token);
+                localStorage.setItem('userInfo', JSON.stringify(result.user));
+
+                // 记住密码功能
+                if (rememberMe.checked) {
+                    localStorage.setItem('rememberMe', 'true');
+                    localStorage.setItem('savedUsername', username);
+                    localStorage.setItem('savedPassword', password);
+                } else {
+                    localStorage.removeItem('rememberMe');
+                    localStorage.removeItem('savedUsername');
+                    localStorage.removeItem('savedPassword');
+                }
+
+                // 跳转到首页
+                setTimeout(() => {
+                    window.location.href = '/dashboard.html';
+                }, 1000);
+            } else {
+                // 登录失败处理
+                showAlert(result.message || '登录失败，请检查用户名和密码', 'error');
+            }
+        } catch (error) {
+            console.error('登录错误:', error);
+            showAlert('登录过程中出错，请重试', 'error');
+        } finally {
+            // 恢复按钮状态
+            this.textContent = originalText;
+            this.disabled = false;
+        }
     });
-});
+}
+
+// 初始化注册功能
+function initRegister() {
+    const registerBtn = document.querySelector('.sign-up .btn');
+    const usernameInput = document.querySelector('.sign-up input[name="fullname"]');
+    const passwordInput = document.querySelector('.sign-up input[name="Username"]');
+    const confirmPasswordInput = document.querySelector('.sign-up input[name="Password"]');
+
+    registerBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        // 客户端验证
+        if (!username || !password || !confirmPassword) {
+            showAlert('请填写所有字段', 'error');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showAlert('两次输入的密码不一致', 'error');
+            return;
+        }
+
+        if (password.length < 8) {
+            showAlert('密码长度至少为8个字符', 'error');
+            return;
+        }
+
+        // 显示加载状态
+        const originalText = this.textContent;
+        this.textContent = '注册中...';
+        this.disabled = true;
+
+        try {
+            // 调用注册API
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // 注册成功处理
+                showAlert('注册成功！请登录', 'success');
+
+                // 自动切换到登录表单
+                document.querySelector(".container").classList.remove("login-in");
+
+                // 清空注册表单
+                usernameInput.value = '';
+                passwordInput.value = '';
+                confirmPasswordInput.value = '';
+            } else {
+                // 注册失败处理
+                showAlert(result.message || '注册失败，请重试', 'error');
+            }
+        } catch (error) {
+            console.error('注册错误:', error);
+            showAlert('注册过程中出错，请重试', 'error');
+        } finally {
+            // 恢复按钮状态
+            this.textContent = originalText;
+            this.disabled = false;
+        }
+    });
+}
+
+// 检查记住密码状态
+function checkRememberMe() {
+    const rememberMe = document.getElementById('remember');
+    const usernameInput = document.querySelector('.login-in input[name="Username"]');
+    const passwordInput = document.querySelector('.login-in input[name="Password"]');
+
+    if (localStorage.getItem('rememberMe') === 'true') {
+        rememberMe.checked = true;
+        usernameInput.value = localStorage.getItem('savedUsername') || '';
+        passwordInput.value = localStorage.getItem('savedPassword') || '';
+    }
+}
 
 // 忘记密码功能
 function showForgotPassword() {
     const email = prompt("请输入您的注册邮箱：");
-    if(email) {
-        alert("重置密码链接已发送至您的邮箱：" + email);
-        // 这里可以添加实际的密码重置逻辑
+    if (email) {
+        resetPassword(email);
     }
 }
 
+// 密码重置功能
+async function resetPassword(email) {
+    if (!email) return;
 
-// script.js 新增功能
+    try {
+        const response = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            showAlert(result.message || '重置密码链接已发送至您的邮箱', 'success');
+        } else {
+            showAlert(result.message || '密码重置失败，请重试', 'error');
+        }
+    } catch (error) {
+        console.error('密码重置错误:', error);
+        showAlert('密码重置过程中出错，请重试', 'error');
+    }
+}
+
+// 显示提示信息
+function showAlert(message, type = 'info') {
+    // 移除旧的提示
+    const oldAlert = document.querySelector('.custom-alert');
+    if (oldAlert) oldAlert.remove();
+
+    // 创建提示元素
+    const alert = document.createElement('div');
+    alert.className = `custom-alert ${type}`;
+    alert.textContent = message;
+
+    // 样式
+    alert.style.position = 'fixed';
+    alert.style.top = '20px';
+    alert.style.left = '50%';
+    alert.style.transform = 'translateX(-50%)';
+    alert.style.padding = '10px 20px';
+    alert.style.borderRadius = '4px';
+    alert.style.color = 'white';
+    alert.style.zIndex = '1000';
+    alert.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+
+    // 根据类型设置背景色
+    const colors = {
+        success: '#4CAF50',
+        error: '#F44336',
+        info: '#2196F3',
+        warning: '#FF9800'
+    };
+    alert.style.backgroundColor = colors[type] || colors.info;
+
+    // 添加到页面
+    document.body.appendChild(alert);
+
+    // 3秒后自动消失
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transition = 'opacity 0.5s';
+        setTimeout(() => alert.remove(), 500);
+    }, 3000);
+}
+
+// 用户菜单功能
 function toggleUserMenu() {
     const dropdown = document.querySelector('.user-dropdown');
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
 
 // 点击外部关闭菜单
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (!e.target.closest('.user-menu')) {
-        document.querySelector('.user-dropdown').style.display = 'none';
+        const dropdown = document.querySelector('.user-dropdown');
+        if (dropdown) dropdown.style.display = 'none';
     }
 });
-
-// 图标字体定义（可替换为实际图标）
-const style = document.createElement('style');
-style.textContent = `
-@font-face {
-    font-family: 'iconfont';
-    src: url('iconfont.woff2') format('woff2');
-}
-.icon-briefcase:before { content: "\\e601"; }
-.icon-bookmark:before { content: "\\e602"; }
-.icon-edit:before { content: "\\e603"; }
-.icon-settings:before { content: "\\e604"; }
-.icon-exit:before { content: "\\e605"; }
-.icon-search:before { content: "\\e606"; }
-.icon-user:before { content: "\\e607"; }
-.icon-tag:before { content: "\\e608"; }
-.icon-stock:before { content: "\\e609"; }
-`;
-document.head.appendChild(style);

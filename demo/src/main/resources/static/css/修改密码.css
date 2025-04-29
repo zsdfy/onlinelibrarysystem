@@ -1,0 +1,207 @@
+/* 基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* 卡片容器 */
+.password-change-container {
+  width: 100%;
+  max-width: 480px;
+  padding: 20px;
+}
+
+.password-change-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 32px;
+}
+
+/* 卡片头部 */
+.card-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.card-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.card-header p {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+/* 表单样式 */
+.password-change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 12px 16px;
+  padding-right: 40px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-with-icon input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.input-with-icon input:disabled {
+  background-color: #f9f9f9;
+  cursor: not-allowed;
+}
+
+.input-with-icon .material-icons {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a5a6;
+  pointer-events: none;
+}
+
+.input-with-icon .toggle-password {
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 验证反馈 */
+.validation-feedback {
+  font-size: 12px;
+  height: 16px;
+  margin-top: 4px;
+}
+
+/* 密码强度指示器 */
+.password-strength-meter {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.strength-bar {
+  height: 4px;
+  background: #ecf0f1;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.strength-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--width, 0%);
+  background-color: var(--strength-color, #ecf0f1);
+  transition: all 0.3s ease;
+}
+
+.strength-text {
+  font-size: 12px;
+}
+
+/* 密码要求列表 */
+.password-requirements {
+  list-style: none;
+  margin-top: 8px;
+}
+
+.password-requirements li {
+  font-size: 12px;
+  color: #95a5a6;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.password-requirements li::before {
+  content: '•';
+  margin-right: 6px;
+}
+
+.password-requirements li.valid {
+  color: #27ae60;
+}
+
+.password-requirements li.valid::before {
+  content: '✓';
+}
+
+/* 提交按钮 */
+.submit-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+}
+
+.submit-btn:hover {
+  background: #2980b9;
+}
+
+.submit-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .password-change-card {
+    padding: 24px;
+  }
+
+  .card-header h2 {
+    font-size: 20px;
+  }
+}

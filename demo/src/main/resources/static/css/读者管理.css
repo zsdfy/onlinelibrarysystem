@@ -1,0 +1,383 @@
+.main-content {
+  margin-top: 50px;
+  margin-left: 9rem;
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  transition: margin-left 200ms ease;
+}
+
+.condition {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.filter-group label {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #555;
+}
+
+.filter-selete {
+  padding: 12px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.filter-selete:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.date-range {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.date-picker {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.date-picker input[type="date"] {
+  border: none;
+  padding: 4px;
+  width: 120px;
+}
+
+.date-picker span {
+  margin: 0 8px;
+  color: #666;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.search-input input[type="text"] {
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  min-width: 150px;
+}
+
+.img-search-btn {
+  background: #f5f5f5;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.img-search-btn img {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+.img-search-btn:hover {
+  background: #eee;
+}
+
+.create-reader {
+  margin-left: auto;
+  /* display: inline-block; */
+}
+
+.add-user-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+}
+
+.add-user-btn:hover {
+  background-color: #45a049;
+}
+
+.add-user-btn i {
+  font-size: 14px;
+}
+
+/* 表格格式 */
+.reader-table {
+  width: 100%;
+  border-collapse: collapse;
+  /* margin-top: 15px; */
+  border-collapse: collapse;
+}
+
+.reader-table-container {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.reader-table th,
+.reader-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  word-wrap: break-word;
+}
+
+.reader-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+}
+
+.reader-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* 状态格式 */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-normal {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-banned {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-muted {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.status-btn,
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-btn:hover {
+  background-color: #5a6268;
+}
+
+.edit-btn {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #138496;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  /* max-height: 90vh;
+  overflow-y: auto; */
+}
+
+.close-modal {
+  position: absolute;
+  right: 20px;
+  timeline-scope: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button {
+  background: #28a745;
+  color: white;
+}
+
+.submit-button:hover {
+  background: #218838;
+}
+
+.cancel-button {
+  background: #6c757d;
+  color: white;
+}
+
+.cancel-button:hover {
+  background: #5a6268;
+}
+
+/* 编辑表单 */
+.edit-form-group {
+  margin-bottom: 15px;
+}
+
+.edit-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.edit-form-group input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgb(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: none;
+}
+
+.toast.show {
+  display: block;
+  opacity: 1;
+}
+
+
+
+/* 响应设计 */
+@media(max-width:768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem 0.5rem;
+  }
+
+  .condition {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

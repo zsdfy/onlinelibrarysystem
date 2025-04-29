@@ -1,0 +1,163 @@
+<!-- readernavbar.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的图书</title>
+  <!-- <link rel="stylesheet" href="../css/index.css"> -->
+  <link rel="stylesheet" href="../css/readernavbar.css">
+  <link rel="stylesheet" href="../css/我的图书.css">
+</head>
+
+<body>
+  <!-- 顶部导航 -->
+  <div class="top_ele">
+    <ul class="top_navs">
+      <li class="admin-title">
+        <!-- 左边的竖线 -->
+        <!-- <span class="line left"></span> -->
+        <span class="title-text">我的图书</span>
+        <!-- 右边的竖线 -->
+        <!-- <span class="line right"></span> -->
+      </li>
+      <li class="exit">
+        <!-- <span class="line left"></span> -->
+        <a href="./index.html">退出登录</a>
+        <!-- <span class="line right"></span> -->
+      </li>
+    </ul>
+  </div>
+
+  <!-- 左侧导航 -->
+  <nav class="navbar">
+    <ul class="navbar-nav">
+      <li class="logo">
+        <a href="#" class="nav-link" id="toggle">
+          <span class="link-text">BOOK</span>
+          <img src="https://img.icons8.com/fluency/48/cms.png" class="icon" />
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./借阅图书.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/books.png" class="icon" />
+          <span class="link-text">借阅图书</span>
+        </a>
+        <!-- <span class="link-text">借阅图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./推荐图书.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/good-quality.png" class="icon" />
+          <span class="link-text">推荐图书</span>
+        </a>
+        <!-- <span class="link-text">推荐图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./我的图书.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/user-male-circle.png" class="icon" />
+          <span class="link-text">我的图书</span>
+        </a>
+        <!-- <span class="link-text">我的图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./index.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/day-and-night.png" class="icon" />
+          <span class="link-text">更换</span>
+        </a>
+        <!-- <span class="link-text">更换</span> -->
+      </li>
+    </ul>
+  </nav>
+
+  <!-- 主内容 -->
+  <div class="main-content">
+    <div class="top">
+      <div class="search-input">
+        <input type="text" placeholder="搜索图书">
+        <buttun class="img-search-btn">
+          <img src="../image/搜索.png" alt="搜索">
+        </buttun>
+      </div>
+    </div>
+    <div class="type-choose">
+      <ul class="type" id="categoryTabs">
+        <li class="active" data-type="all">
+          <span>全部</span>
+        </li>
+        <li data-type="borred">
+          <span>借阅图书</span>
+        </li>
+        <li data-type="history">
+          <span>借阅历史</span>
+        </li>
+        <li data-type="collected">
+          <span>我的收藏</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- 类别表格 -->
+  <div class="category-table-container active-container">
+    <table class="book-table">
+    </table>
+  </div>
+  
+  <!-- 借阅图书表格 -->
+  <div class="category-table-container" id="borrowedTableContainer">
+    <table calss="book-table">
+      <thead>
+        <tr>
+          <th width="30%">书名</th>
+          <th width="25%">借阅时间</th>
+          <th width="25%">还书时间</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody id="borrowedTableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 历史表格内容 -->
+  <div class="category-table-container" id="historyTableContainer">
+    <table class="book-table">
+      <thead>
+        <tr>
+          <th width="30%">书名</th>
+          <th width="25%">借阅时间</th>
+          <th width="25%">还书时间</th>
+          <th width="20%">操作</th>
+        </tr>
+      </thead>
+      <tbody id="historyTableBody">
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 收藏图书 -->
+  <div class="book-cards-container" id="collectBooksContainer">
+  </div>
+
+  <!-- 全部图书 -->
+  <div class="book-cards-container" id="allBooksContainer">
+  </div>
+
+  <!-- 分页 -->
+  <div class="pagination">
+    <button class="page-btn" id="prevPage">
+      <i class="fas fa-angle-double-left">上一页</i>
+    </button>
+    <div class="page-numbers" id="pageNumbers"></div>
+    <button class="page-btn" id="nextPage">
+      <i class="fas fa-angle-double-right">下一页</i>
+    </button>
+  </div>
+
+  <script src="../JS/iconbutton.js"></script>
+  <script src="../JS/myBook.js"></script>
+</body>
+
+</html>
