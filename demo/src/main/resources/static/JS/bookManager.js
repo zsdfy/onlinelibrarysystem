@@ -2,15 +2,36 @@
 let currentPage = 1;
 const booksPerPage = 8;
 let allBooks = [];
-let bookshelves = [];
-let categories = [];
+let types = [];
+// let bookshelves = [];
+// let categories = [];
 let isSubmitting = false;
 
 // API配置（新增）
 const API_CONFIG = {
-  BASE_URL: '#', 
-  TIMEOUT: 10000 
+  BASE_URL: 'http://localhost:8080',
+  TIMEOUT: 10000
 };
+
+//分页导航函数
+function  goToPrevPage() {
+  if(currentPage > 1) {
+    currentPage--;
+    loadBooks(currentPage);
+    // renderBooks();
+    // updatePagination();
+  }
+}
+
+function goToNextPage() {
+  const totalPages = Math.ceil(allBooks.length/booksPerPage);
+  if(currentPage < totalPages) {
+    currentPage++;
+    loadBooks(currentPage);
+    // renderBooks();
+    // updatePagination();
+  }
+}
 
 // DOM加载完成后初始化
 document.addEventListener('DOMContentLoaded', async function () {
@@ -26,9 +47,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   // 加载初始数据
   await Promise.all([
-    loadBookshelves(),
-    loadCategories(),
-    loadBooks()
+    // loadBookshelves(),
+    // loadCategories(),
+    loadTypes(),
+    loadBooks(1)
   ]);
 });
 
@@ -64,44 +86,24 @@ async function apiRequest(endpoint, method = 'GET', body = null) {
   }
 }
 
-// 从后台加载书架数据
-async function loadBookshelves() {
-  try {
-    showLoading('加载书架数据中...');
-    const data = await apiRequest('/api/bookshelves');
-
-    bookshelves = data;
-
-    const select = document.getElementById('bookshelf');
-    select.innerHTML = '<option value="">-- 请选择书架 --</option>';
-    bookshelves.forEach(shelf => {
-      const option = document.createElement('option');
-      option.value = shelf.id;
-      option.textContent = `${shelf.name} (${shelf.location})`;
-      select.appendChild(option);
-    });
-  } catch (error) {
-    console.error('加载书架数据错误:', error);
-    showError('加载书架数据失败: ' + error.message);
-  } finally {
-    hideLoading();
-  }
-}
 
 // 从后台加载类别数据
-async function loadCategories() {
+async function loadTypes() {
   try {
     showLoading('加载类别数据中...');
-    const data = await apiRequest('/api/categories');
+    const response = await apiRequest('/api/types');
 
-    categories = data;
+    types = response.data || [];
 
-    const select = document.getElementById('category');
+    console.log('Loaded Types:', types); // 调试日志
+
+
+    const select = document.getElementById('type');
     select.innerHTML = '<option value="">-- 请选择类别 --</option>';
-    categories.forEach(cat => {
+    types.forEach(type => {
       const option = document.createElement('option');
-      option.value = cat.id;
-      option.textContent = cat.name;
+      option.value = type.type;
+      option.textContent = type.type;
       select.appendChild(option);
     });
   } catch (error) {
@@ -112,13 +114,23 @@ async function loadCategories() {
   }
 }
 
+
 // 从后台加载书籍数据
-async function loadBooks() {
+async function loadBooks(pageNum = 1, pageSize = booksPerPage) {
   try {
     showLoading('加载书籍数据中...');
-    const data = await apiRequest('/api/books');
+    // const data = await apiRequest('/api/books');
+    const response = await apiRequest(`/api/books?pageNum=${pageNum}&pageSize=${pageSize}`);
 
-    allBooks = data;
+    // 从响应结果中获取数据
+    // const { data } = response;
+    // allBooks = data;
+    allBooks = (response.data || []).map(book => ({
+      ...book,
+      typeName: (types || []).find(t => t.type === book.type) ?.type || '未分类'
+    }));
+
+    console.log('Loaded Books:', allBooks); // 调试日志
     renderBooks();
   } catch (error) {
     console.error('加载书籍数据错误:', error);
@@ -160,7 +172,8 @@ function renderBooks() {
 
   const startIndex = (currentPage - 1) * booksPerPage;
   const endIndex = startIndex + booksPerPage;
-  const booksToShow = allBooks.slice(startIndex, endIndex);
+  const booksToShow = allBooks.slice((currentPage - 1) * booksPerPage, currentPage * booksPerPage);
+  // const booksToShow = allBooks.slice(startIndex, endIndex);
 
   if (booksToShow.length === 0) {
     container.innerHTML = '<div class="no-books">没有找到符合条件的书籍</div>';
@@ -169,40 +182,45 @@ function renderBooks() {
   }
 
   booksToShow.forEach(book => {
-    const shelf = bookshelves.find(s => s.id === book.bookshelfId) || {};
-    const category = categories.find(c => c.id === book.categoryId) || {};
-
-    const card = document.createElement('div');
-    card.className = 'book-card';
-    card.innerHTML = `
-      <img src="${book.coverUrl || 'https://via.placeholder.com/200x300?text=无封面'}" alt="${book.title}" class="book-cover">
-      <div class="book-info">
-        <h3 class="book-title" title="${book.title}">${book.title}</h3>
-        <p class="book-meta"><i class="fas fa-user"></i> ${book.author}</p>
-        <p class="book-meta"><i class="fas fa-bookmark"></i> ${category.name || '未分类'}</p>
-        <p class="book-meta"><i class="fas fa-map-marker-alt"></i> ${shelf.name || '未知'} (${shelf.location || '未知位置'})</p>
-        <p class="book-meta"><i class="fas fa-copy"></i> 库存: ${book.quantity}本</p>
-        <div class="book-actions">
-          <button class="book-btn edit" data-id="${book.id}">
-            <i class="fas fa-edit"></i>编辑
-          </button>
-          <button class="book-btn delete" data-id="${book.id}">
-            <i class="fas fa-trash-alt"></i>删除
-          </button>
+    const card = `
+      <div class="book-card">
+        <div>
+            <img src="${book.bimage || 'https://placehold.co/90x100?text=无封面'}" 
+                alt="${book.bname}" class="book-cover">
         </div>
-      </div>
-    `;
-    container.appendChild(card);
-
-    // 添加编辑和删除事件
-    card.querySelector('.edit').addEventListener('click', () => openEditModal(book.id));
-    card.querySelector('.delete').addEventListener('click', () => deleteBook(book.id));
+        
+        <div class="book-info">
+          <h3 class="book-title">${book.bname}</h3>
+          <p class="book-meta"><i class="fas fa-user"></i> ${book.author}</p>
+          <p class="book-meta"><i class="fas fa-bookmark"></i> ${book.typeName}</p>
+          <p class="book-meta"><i class="fas fa-copy"></i> 库存: ${book.stock}本</p>
+          <p class="book-meta"><i class="fas fa-globe"></i> ${book.language || '未知语言'}</p>
+          <div class="book-actions">
+            <button class="book-btn edit" data-id="${book.id}">
+              <i class="fas fa-edit"></i>编辑
+            </button>
+            <button class="book-btn delete" data-id="${book.id}">
+              <i class="fas fa-trash-alt"></i>删除
+            </button>
+          </div>
+        </div>
+      </div>`;
+    container.insertAdjacentHTML('beforeend', card);
   });
 
+  container.querySelectorAll('.edit').forEach(btn => {
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+  });
+  container.querySelectorAll('.delete').forEach(btn => {
+    btn.addEventListener('click', () => deleteBook(btn.dataset.id));
+  });
+
+
   renderPagination();
+  updatePagination();
 }
 
-// 打开新增书籍模态框 
+// 打开新增书籍模态框
 function openAddModal() {
   console.log("openAddModal函数被调用"); // 调试
   try {
@@ -225,14 +243,21 @@ function openAddModal() {
 }
 
 function updatePagination() {
-  const totalPages = Math.max(1, Math.ceil(totalRecords / itemsPerPage));
-  pageInfo.textContent = `第${currentPage}页 / 共${totalPages}页`;
+  const totalRecords = allBooks.length;
+  const totalPages = Math.max(1, Math.ceil(totalRecords / booksPerPage));
 
+  const pageInfo = document.getElementById('pageInfo');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+
+  document.getElementById('pageInfo').textContent =
+      `第${pageInfo.pageNum}页 / 共${pageInfo.pages}页`;
+  // pageInfo.textContent = `第${currentPage}页 / 共${totalPages}页`;
   prevPageBtn.disabled = currentPage === 1;
   nextPageBtn.disabled = currentPage === totalPages || totalRecords === 0;
 }
 
-documaddEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function () {
   console.log("DOM已加载"); // 调试
 
   // 确保按钮存在并正确绑定事件
@@ -245,8 +270,8 @@ documaddEventListener('DOMContentLoaded', async function () {
   }
 
   await Promise.all([
-    loadBookshelves(),
-    loadCategories(),
+    // loadBookshelves(),
+    loadTypes(),
     loadBooks()
   ]);
 });
@@ -272,26 +297,21 @@ async function openEditModal(bookId) {
 
     // 填充表单
     document.getElementById('modalTitle').textContent = '编辑书籍';
-    document.getElementById('bookId').value = book.id;
-    document.getElementById('bookName').value = book.title;
+    document.getElementById('bookName').value = book.bname;
     document.getElementById('author').value = book.author;
-    document.getElementById('publisher').value = book.publisher;
-    document.getElementById('isbn').value = book.isbn;
-    document.getElementById('quantity').value = book.quantity;
-    document.getElementById('bookshelf').value = book.bookshelfId;
-    document.getElementById('category').value = book.categoryId;
+    document.getElementById('quantity').value = book.stock;
+    document.getElementById('type').value = book.type;
+    document.getElementById('language').value = book.language;
     document.getElementById('description').value = book.description;
 
     // 显示封面预览
     const coverPreview = document.getElementById('coverPreview');
-    coverPreview.innerHTML = '';
-    if (book.coverUrl) {
-      const img = document.createElement('img');
-      img.src = book.coverUrl;
-      coverPreview.appendChild(img);
-    }
+    coverPreview.innerHTML = book.bimage
+        ? `<img src="${book.bimage}" style="max-width: 200px">`
+        : '';
 
     document.getElementById('bookModal').style.display = 'block';
+
   } catch (error) {
     console.error('加载书籍详情错误:', error);
     showError('获取书籍详情失败: ' + error.message);
@@ -308,64 +328,66 @@ async function handleFormSubmit(event) {
   if (isSubmitting) return;
   isSubmitting = true;
 
-  const submitBtn = event.target.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.textContent;
-  submitBtn.disabled = true;
-  submitBtn.textContent = '保存中...';
+  const formData = new FormData(event.target);
+  const bookId = document.getElementById('bookId').value;
 
   try {
+    // 处理文件上传
+    // let coverUrl = '';
+    const coverFile = formData.get('cover');
+    if (coverFile.size > 0) {
+      const uploadForm = new FormData();
+      uploadForm.append('file', coverFile);
 
-    const bookId = document.getElementById('bookId').value;
-    const isEdit = !!bookId;
+      const uploadRes = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadForm
 
-    // 使用FormData处理文件上传
-    const formData = new FormData();
-    formData.append('title', document.getElementById('bookName').value);
-    formData.append('author', document.getElementById('author').value);
-    formData.append('publisher', document.getElementById('publisher').value);
-    formData.append('isbn', document.getElementById('isbn').value);
-    formData.append('quantity', document.getElementById('quantity').value);
-    formData.append('bookshelfId', document.getElementById('bookshelf').value);
-    formData.append('categoryId', document.getElementById('category').value);
-    formData.append('description', document.getElementById('description').value);
-
-    const coverFile = document.getElementById('cover').files[0];
-    if (coverFile) formData.append('cover', coverFile);
-
-    showLoading(isEdit ? '更新书籍中...' : '添加书籍中...');
-
-    // 特殊处理FormData请求
-    const endpoint = isEdit ? `/api/books/${bookId}` : '/api/books';
-    const response = await fetch(`${API_CONFIG.BASE_URL}${endpoint}`, {
-      method: isEdit ? 'PUT' : 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || (isEdit ? '更新书籍失败' : '添加书籍失败'));
+      });
+      const { url } = await uploadRes.json();
+      formData.set('bimage', url);
+      // coverUrl = url;
     }
 
-    const result = await response.json();
-    showSuccess(isEdit ? '书籍更新成功！' : '书籍添加成功！');
+    // 构建请求数据
+  const bookData = {
+    bname: formData.get('bookName'),
+    author: formData.get('author'),
+    type: formData.get('type'),
+    stock: parseInt(formData.get('quantity')),
+    type: formData.get('type'),
+    language: formData.get('language'),
+    bimage: formData.get('bimage') || ''
+  };
+  // const submitBtn = event.target.querySelector('button[type="submit"]');
+  // const originalBtnText = submitBtn.textContent;
+  // submitBtn.disabled = true;
+  // submitBtn.textContent = '保存中...';
 
-    // 重新加载数据
-    await Promise.all([
-      loadBookshelves(),
-      loadCategories(),
-      loadBooks()
-    ]);
+    // 确定请求方法
+    const endpoint = bookId ? `/books/${bookId}` : '/books';
+    // const endpoint = bookId ? `/api/books/${bookId}` : '/api/books';
+    const method = bookId ? 'PUT' : 'POST';
 
+    const response = await fetch(`${API_CONFIG.BASE_URL}${endpoint}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookData)
+    });
+
+    if (!response.ok) throw new Error('请求失败');
+
+    showSuccess(bookId ? '更新成功！' : '添加成功！');
+    await loadBooks();
     closeModal();
   } catch (error) {
-    console.error('表单提交错误:', error);
-    showError(`操作失败: ${error.message}`);
+    showError('操作失败: ' + error.message);
   } finally {
     isSubmitting = false;
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalBtnText;
-    hideLoading();
   }
+
 }
 
 // 删除书籍
@@ -382,5 +404,79 @@ async function deleteBook(bookId) {
     showError('删除书籍失败: ' + error.message);
   } finally {
     hideLoading();
+  }
+}
+
+
+
+//加载状态管理函数
+function showLoading(message = '加载中...') {
+  const loadingEl = document.createElement('div');
+  loadingEl.id = 'loadingOverlay';
+  loadingEl.innerHTML = `
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <p>${message}</p>
+    </div>
+  `;
+  document.body.appendChild(loadingEl);
+}
+
+function hideLoading() {
+  const loadingEl = document.getElementById('loadingOverlay');
+  if(loadingEl) loadingEl.remove();
+}
+
+//封面预览
+function previewCover(event) {
+  const input = event.target;
+  const preview = document.getElementById('coverPreview');
+  preview.innerHTML = '';
+
+  if(input.files && input.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.maxWidth = '200px';
+      preview.appendChild(img);
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function showError(message) {
+  alert('错误: ' + message);
+}
+
+function showSuccess(message) {
+  alert('成功: ' + message);
+}
+
+// 渲染分页
+function renderPagination() {
+  const pageNumbersContainer = document.getElementById('pageNumbers');
+  if (!pageNumbersContainer) return;
+
+  pageNumbersContainer.innerHTML = '';
+
+  const totalPages = Math.ceil(allBooks.length / booksPerPage);
+  if (totalPages <= 1) return;
+
+  // 显示页码按钮
+  for (let i = 1; i <= totalPages; i++) {
+    const pageBtn = document.createElement('button');
+    pageBtn.textContent = i;
+    pageBtn.classList.add('page-number');
+    if (i === currentPage) {
+      pageBtn.classList.add('active');
+    }
+    pageBtn.addEventListener('click', () => {
+      currentPage = i;
+      renderBooks();
+      updatePagination();
+    });
+    pageNumbersContainer.appendChild(pageBtn);
   }
 }

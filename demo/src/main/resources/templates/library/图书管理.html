@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
@@ -127,20 +127,11 @@
             <button class="page-btn" id="prevPage">
                 <i class="fas fa-angle-double-left">上一页</i>
             </button>
-            <div id="pageInfo" class="page-info"></div>
             <div class="page-numbers" id="pageNumbers"></div>
             <button class="page-btn" id="nextPage">
                 <i class="fas fa-angle-double-right">下一页</i>
             </button>
         </div>
-
-        <style>
-            .page-info {
-                margin: 0 15px;
-                color: #666;
-                line-height: 32px;
-            }
-        </style>
 
         <!-- 新增/编辑图书界面 -->
         <div id="bookModal" class="modal">
@@ -162,6 +153,7 @@
                         </div>
                     </div>
 
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="quantity">库存数量</label>
@@ -171,9 +163,9 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="type">书籍类型</label>
-                            <select id="type" name="type" required>
-                                <option value="">-- 请选择类型 --</option>
+                            <label for="type">书籍类别</label>
+                            <select id="type" name="type">
+                                <option value="">-- 选择书籍类别 --</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -187,6 +179,7 @@
                         <input type="file" id="cover" name="cover" accept="image/*">
                         <div class="cover-preview" id="coverPreview"></div>
                     </div>
+
 
                     <div class="form-actions">
                         <button type="submit" class="submit-btn">保存</button>

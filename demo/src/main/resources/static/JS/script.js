@@ -76,7 +76,7 @@ function initLogin() {
 
         try {
             // 调用登录API
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -110,7 +110,8 @@ function initLogin() {
 
                 // 跳转到首页
                 setTimeout(() => {
-                    window.location.href = '/dashboard.html';
+                    // window.location.href = '/图书管理.html';
+                    window.location.href = result.redirect; // 使用后端返回的跳转地址
                 }, 1000);
             } else {
                 // 登录失败处理

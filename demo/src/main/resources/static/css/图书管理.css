@@ -115,13 +115,23 @@
   padding: 15px 0;
 }
 
-.book-card{
+/*.book-card{*/
+/*  background: white;*/
+/*  border-radius: 8px;*/
+/*  box-shadow: 0 2px 8px rgb(0,0,0,0.1);*/
+/*  overflow: hidden;*/
+/*  transition: transform 0.3s ease,box-shadow 0.3s ease;*/
+/*  position: relative;*/
+/*}*/
+
+.book-card {
+  display: flex;
+  gap: 15px;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgb(0,0,0,0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease,box-shadow 0.3s ease;
-  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .book-card:hover{
@@ -129,11 +139,17 @@
   box-shadow: 0 5px 15px rgb(0,0,0,0.1);
 }
 
+.book-card:hover .book-cover {
+  transform: scale(1.05);
+}
+
 .box-cover{
   width: 100%;
-  height: 180px;
+  height: 100%;
+  /*height: 180px;*/
   object-fit: cover;
-  border-bottom: 1px solid #eee;
+  transition: transform 0.3s ease;
+  /*border-bottom: 1px solid #eee;*/
 }
 
 .book-info{
@@ -143,19 +159,21 @@
 .book-title{
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
+  /*margin-bottom: 8px;*/
   color: #333;
-  display: -webkit-box;
+  /*display: -webkit-box;*/
   /* -webkit-line-clamp: 2; */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 40px;
+  /*-webkit-box-orient: vertical;*/
+  /*overflow: hidden;*/
+  /*height: 40px;*/
 }
 
 .book-meta{
   font-size: 13px;
   color: #666;
-  margin-bottom: 5px;
+  margin: 3px 0;
+  /*margin-bottom: 5px;*/
   display: flex;
   align-items: center;
 }
@@ -167,11 +185,14 @@
 }
 
 .book-actions{
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
+  /*display: flex;*/
+  /*justify-content: space-between;*/
+  /*margin-top: 15px;*/
+  margin-top: auto;
   padding-top: 10px;
-  border-top: 1px solid #eee;
+  display: flex;
+  gap: 10px;
+  /*border-top: 1px solid #eee;*/
 }
 
 .book-btn{
@@ -338,6 +359,13 @@
 }
 
 /* 封面 */
+.cover-container {
+  flex: 0 0 120px; /* 固定宽度 */
+  height: 180px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
 .cover-preview{
   margin-top: 10px;
   width: 100px;
@@ -421,4 +449,16 @@ select:invalid {
 
 .cancel-btn:hover {
   background-color: #5a6268;
+}
+
+/* 响应式调整 */
+@media (max-width: 480px) {
+  .book-card {
+    flex-direction: column;
+  }
+
+  .cover-container {
+    flex: none;
+    height: 200px;
+  }
 }

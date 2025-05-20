@@ -5,7 +5,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://localhost:3306/onlinebookmanager?useUnicode=true&characterEncoding-utf8
+    url: jdbc:mysql://localhost:3306/onlinebooksystem?useUnicode=true&characterEncoding-utf8
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       min-idle: 5
