@@ -1,0 +1,99 @@
+<!-- adminnavbar.html -->
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员侧边导航栏</title>
+    <link rel="stylesheet" href="../css/adminnavbar.css">
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="top_ele">
+        <ul class="top_navs">
+            <li class="admin-title">
+                <!-- 左边的竖线 -->
+                <!-- <span class="line left"></span> -->
+                <span class="title-text">管理员界面</span>
+                <!-- 右边的竖线 -->
+                <!-- <span class="line right"></span> -->
+            </li>
+            <li class="exit">
+                <!-- <span class="line left"></span> -->
+                <a href="./index.html">退出登录</a>
+                <!-- <span class="line right"></span> -->
+            </li>
+        </ul>
+    </div>
+
+    <!-- 左侧导航 -->
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li class="logo">
+                <a href="#" class="nav-link" id="toggle">
+                    <span class="link-text">BOOK</span>
+                    <img src="https://img.icons8.com/fluency/48/cms.png" class="icon" />
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./图书管理.html" class="nav-link" th:href="@{/book/listbook}" class="active">
+                    <img src="https://img.icons8.com/fluency/48/library-building.png" class="icon" />
+                    <span class="link-text">图书管理</span>
+                </a>
+                <!-- <span class="link-text">借阅图书</span> -->
+            </li>
+            <li class="nav-item">
+                <a href="./读者管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/reading.png" class="icon" />
+                    <span class="link-text">读者管理</span>
+                </a>
+                <!-- <span class="link-text">推荐图书</span> -->
+            </li>
+            <li class="nav-item">
+                <a href="./借阅记录管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/record.png" class="icon" />
+                    <span class="link-text">借阅记录管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./统计分析.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/statistics.png" class="icon" />
+                    <span class="link-text">统计分析</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./类别管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/category.png" class="icon" />
+                    <span class="link-text">类别管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./库存管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/warehouse.png" class="icon" />
+                    <span class="link-text">库存管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./修改密码.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/password.png" class="icon" />
+                    <span class="link-text">修改密码</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./index.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/day-and-night.png" class="icon" />
+                    <span class="link-text">更换</span>
+                </a>
+                <!-- <span class="link-text">更换</span> -->
+            </li>
+        </ul>
+    </nav>
+    <!-- <main>
+            <h2>图书推荐</h2>
+        </main> -->
+    <script src="../JS/iconbutton.js"></script>
+</body>
+
+</html>

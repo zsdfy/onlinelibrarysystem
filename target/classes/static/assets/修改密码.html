@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改密码</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../css/修改密码.css">
+</head>
+
+<body>
+  <div class="password-change-container">
+    <div class="password-change-card">
+      <div class="card-header">
+        <h2>修改密码</h2>
+        <p>请验证您的用户名和密码</p>
+      </div>
+
+      <form class="password-change-form" id="passwordForm">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <div class="input-with-icon">
+            <input type="text" id="username" name="username" required>
+            <span class="material-icons">person</span>
+          </div>
+          <div class="validation-feedback" id="usernameFeedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="currentPassword">当前密码</label>
+          <div class="input-with-icon">
+            <input type="password" id="currentPassword" name="currentPassword" required>
+            <span class="material-icons toggle-password" data-target="currentPassword">visibility</span>
+          </div>
+          <div class="validation-feedback" id="passwordFeedback"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">新密码</label>
+          <div class="input-with-icon">
+            <input type="password" id="newPassword" name="newPassword" required disabled>
+            <span class="material-icons toggle-password" data-target="newPassword">visibility</span>
+          </div>
+          <div class="password-strength-meter">
+            <div class="strength-bar"></div>
+            <span class="strength-text"></span>
+          </div>
+          <ul class="password-requirements">
+            <li data-requirement="length">至少8个字符</li>
+            <li data-requirement="uppercase">包含大写字母</li>
+            <li data-requirement="number">包含数字</li>
+            <li data-requirement="special">包含特殊字符</li>
+          </ul>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">确认新密码</label>
+          <div class="input-with-icon">
+            <input type="password" id="confirmPassword" name="confirmPassword" required disabled>
+            <span class="material-icons toggle-password" data-target="confirmPassword">visibility</span>
+          </div>
+          <div class="validation-feedback" id="confirmFeedback"></div>
+        </div>
+
+        <button type="submit" class="submit-btn" disabled>更新密码</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../JS/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>读者管理</title>
+  <link rel="stylesheet" href="../css/adminnavbar.css">
+  <link rel="stylesheet" href="../css/读者管理.css">
+</head>
+
+<body>
+  <!-- 顶部导航 -->
+  <div class="top_ele">
+    <ul class="top_navs">
+      <li class="admin-title">
+        <!-- <span class="line left"></span> -->
+        <span class="title-text">读者管理</span>
+        <!-- <span class="line right"></span> -->
+      </li>
+      <li class="exit">
+        <!-- <span class="line left"></span> -->
+        <a href="./index.html">退出登录</a>
+        <!-- <span class="line right"></span> -->
+      </li>
+    </ul>
+  </div>
+  <!-- 侧边栏 -->
+  <nav class="navbar">
+    <ul class="navbar-nav">
+      <li class="logo">
+        <a href="#" class="nav-link" id="toggle">
+          <span class="link-text">BOOK</span>
+          <img src="https://img.icons8.com/fluency/48/cms.png" class="icon" />
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./图书管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/library-building.png" class="icon" />
+          <span class="link-text">图书管理</span>
+        </a>
+        <!-- <span class="link-text">借阅图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./读者管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/reading.png" class="icon" />
+          <span class="link-text">读者管理</span>
+        </a>
+        <!-- <span class="link-text">推荐图书</span> -->
+      </li>
+      <li class="nav-item">
+        <a href="./借阅记录管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/record.png" class="icon" />
+          <span class="link-text">借阅记录管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./统计分析.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/statistics.png" class="icon" />
+          <span class="link-text">统计分析</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./类别管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/category.png" class="icon" />
+          <span class="link-text">类别管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./库存管理.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/warehouse.png" class="icon" />
+          <span class="link-text">库存管理</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./修改密码.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/password.png" class="icon" />
+          <span class="link-text">修改密码</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="./index.html" class="nav-link">
+          <img src="https://img.icons8.com/fluency/48/day-and-night.png" class="icon" />
+          <span class="link-text">更换</span>
+        </a>
+        <!-- <span class="link-text">更换</span> -->
+      </li>
+    </ul>
+  </nav>
+  <!-- <main>
+        <h2>图书推荐</h2>
+    </main> -->
+  <script src="../JS/iconbutton.js"></script>
+
+  <!-- 主内容 -->
+  <div class="main-content">
+    <div class="condition">
+      <!-- 登录状态选择 -->
+      <div class="filter-group">
+        <label for="statusFilter">账号状态</label>
+        <select id="statusFilter" class="filter-select">
+          <option value="all">全部</option>
+          <option value="normal">正常</option>
+          <option value="banned">封号</option>
+        </select>
+      </div>
+
+      <!-- 禁言状态选择 -->
+      <div class="filter-group">
+        <label for="muteFilter">禁言状态</label>
+        <select id="muteFilter" class="filter-select">
+          <option value="all">全部</option>
+          <option value="normal">正常</option>
+          <option value="muted">禁言</option>
+        </select>
+      </div>
+      <!-- 日期范围选择 -->
+      <div class="date-range">
+        <!-- <div class="date-input">
+          <label>注册开始</label>
+          <input type="date">
+        </div>
+        <div class="date-input">
+          <label>注册结束</label>
+          <input type="date">
+        </div> -->
+        <div class="date-picker">
+          <input type="date" placeholder="注册开始">
+          <span>至</span>
+          <input type="date" placeholder="注册结束">
+        </div>
+      </div>
+
+      <!-- 搜索用户名 -->
+      <div class="search-input">
+        <!-- <label>用户名</label> -->
+        <input type="text" placeholder="用户名">
+        <button class="img-search-btn">
+          <img src="../image/搜索.png" alt="搜索">
+        </button>
+      </div>
+
+      <!-- 新增用户按钮 -->
+      <div class="create-reader">
+        <button class="add-user-btn" id="addUserBtn">
+          <i class="fas fa-user-plus"></i>新增用户
+        </button>
+      </div>
+    </div>
+
+    <!-- 读者信息内容表格 -->
+    <div class="reader-table-container">
+      <table class="reader-table" id="readerTable">
+        <thead>
+          <tr>
+            <th>头像</th>
+            <th>名称</th>
+            <th>账号</th>
+            <th>邮箱</th>
+            <th>角色</th>
+            <th>封号</th>
+            <th>禁言</th>
+            <th>注册于</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="readerTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 账号状态设置模块 -->
+  <div id="statusModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" id="closeStatusModal">&times;</span>
+      <h3>账号状态设置</h3>
+
+      <form class="status-form" id="statusForm">
+        <input type="hidden" id="statusUserId">
+
+        <div class="form-group">
+          <label>封号状态</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="banStatus" value="normal" checked>
+              <span>正常状态</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="banStatus" value="banned">
+              <span>封号</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>禁言状态</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="muteStatus" value="normal" checked>
+              <span>正常</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="muteStatus" value="muted">
+              <span>禁言</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- <div class="form-group">
+          <label>是否设置为管理员</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="role" value="user" checked>
+              <span>普通用户</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="role" value="admin">
+              <span>管理员</span>
+            </label>
+          </div>
+        </div> -->
+
+        <div class="form-actions">
+          <button type="button" class="cance;-button" id="cancelStatus">取消</button>
+          <button type="submit" class="submit-button">确定</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- 用户信息编辑 -->
+  <div class="editModal modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-modal" class="closeEditModal">&times;</span>
+      <h3 id="editModalTitle">编辑读者信息</h3>
+
+      <form id="editForm">
+        <input type="hidden" id="editUserId">
+
+        <div class="form-group">
+          <label for="editName">名称</label>
+          <input type="text" id="editName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editAccount">账号</label>
+          <input type="text" id="editAccount" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editEmail">邮箱</label>
+          <input type="email" id="editEmail" required>
+        </div>
+
+        <!-- <div class="form-group">
+          <label for="editPassword">密码</label>
+          <input type="password" id="editPassword" required>
+        </div> -->
+
+        <div class="form-actions">
+          <button type="button" class="cancel-buutton" id="cancelEdit">取消</button>
+          <button type="submit" class="submit-buutton">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 新增读者页面 -->
+  <div id="addUserModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeAddModal">&times;</span>
+      <h3>新增读者</h3>
+
+      <form id="addUserForm">
+        <div class="form-group">
+          <label for="addName">名称</label>
+          <input type="text" id="addName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="addAccount">账号</label>
+          <input type="text" id="addAccount" required>
+        </div>
+
+        <div class="form-group">
+          <label for="addPassword">密码</label>
+          <input type="password" id="addPassword" required>
+        </div>
+
+        <div class="form-group">
+          <label for="addEmail">邮箱</label>
+          <input type="email" id="addEmail" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-button" id="cancelAdd">取消</button>
+          <button type="submit" class="submit-button">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <div class="toast-content">操作成功</div>
+  </div>
+
+
+
+  <script src="../JS/readerManager.js"></script>
+</body>
+
+</html>

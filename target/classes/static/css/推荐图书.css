@@ -1,0 +1,187 @@
+/* 主内容区域 */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  padding: 1rem;
+  width: 100%;
+}
+
+/* 书籍列表容器 */
+.book-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 书籍卡片容器 */
+.book-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 15px 0;
+}
+
+/* 单个书籍卡片 */
+.book-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 15px;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 书籍封面 */
+.book-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+/* 书籍信息 */
+.book-info {
+  padding: 5px 0;
+}
+
+.book-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-author {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.book-source {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+/* 书籍操作按钮 */
+.book-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.book-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 1;
+  transition: background-color 0.3s;
+}
+
+.book-btn.collect {
+  background-color: #f5f5f5;
+  color: #333;
+  margin-right: 10px;
+}
+
+.book-btn.collect:hover {
+  background-color: #e0e0e0;
+}
+
+/* 已收藏状态样式 */
+.book-btn.collected {
+  background-color: #ffd700;
+  color: #333;
+}
+
+.book-btn.collected:hover {
+  background-color: #e6c200;
+}
+
+/* 借阅按钮 */
+.book-btn.borrow {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.book-btn.borrow:hover {
+  background-color: #3a7bc8;
+}
+
+/*已借阅状态 */
+.book-btn.borrowed {
+  background-color: #4CAF50;
+  color: white;
+  cursor: not-allowed;
+}
+
+.book-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* 分页样式 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.page-btn {
+  padding: 8px 15px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-numbers {
+  margin: 0 10px;
+}
+
+/* 错误消息 */
+.error-message {
+  padding: 15px;
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  text-align: center;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.no-books {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  width: 100%;
+}

@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/onlinebooksystem?useUnicode=true&characterEncoding-utf8
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      min-idle: 5
+      max-active: 10
+      max-wait: 3000
+  thymeleaf:  #Thymeleaf 模板配置
+    prefix: classpath:/templates/library/
+    suffix: .html
+  web:  # 静态资源路径配置
+    resources:
+      static-locations: classpath:/static/, classpath:/static/assets/, classpath:/public/, classpath:/resources/, classpath:/META-INF/resources/,file:${location}
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 启用 SQL 日志输出
+  global-config:
+    db-config:
+      id-type: auto  # 主键生成策略（数据库自增）
+

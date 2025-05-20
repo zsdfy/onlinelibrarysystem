@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书管理</title>
+    <link rel="stylesheet" href="../css/adminnavbar.css">
+    <link rel="stylesheet" href="../css/图书管理.css">
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <div class="top_ele">
+        <ul class="top_navs">
+            <li class="admin-title">
+                <!-- <span class="line left"></span> -->
+                <span class="title-text">图书管理</span>
+                <!-- <span class="line right"></span> -->
+            </li>
+            <li class="exit">
+                <!-- <span class="line left"></span> -->
+                <a href="./index.html">退出登录</a>
+                <!-- <span class="line right"></span> -->
+            </li>
+        </ul>
+    </div>
+
+    <!-- 侧边栏 -->
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li class="logo">
+                <a href="#" class="nav-link" id="toggle">
+                    <span class="link-text">BOOK</span>
+                    <img src="https://img.icons8.com/fluency/48/cms.png" class="icon" />
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./图书管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/library-building.png" class="icon" />
+                    <span class="link-text">图书管理</span>
+                </a>
+                <!-- <span class="link-text">借阅图书</span> -->
+            </li>
+            <li class="nav-item">
+                <a href="./读者管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/reading.png" class="icon" />
+                    <span class="link-text">读者管理</span>
+                </a>
+                <!-- <span class="link-text">推荐图书</span> -->
+            </li>
+            <li class="nav-item">
+                <a href="./借阅记录管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/record.png" class="icon" />
+                    <span class="link-text">借阅记录管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./统计分析.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/statistics.png" class="icon" />
+                    <span class="link-text">统计分析</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./类别管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/category.png" class="icon" />
+                    <span class="link-text">类别管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./库存管理.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/warehouse.png" class="icon" />
+                    <span class="link-text">库存管理</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./修改密码.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/password.png" class="icon" />
+                    <span class="link-text">修改密码</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="./index.html" class="nav-link">
+                    <img src="https://img.icons8.com/fluency/48/day-and-night.png" class="icon" />
+                    <span class="link-text">更换</span>
+                </a>
+                <!-- <span class="link-text">更换</span> -->
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="main-content">
+        <div class="condition">
+            <!-- 日期范围选择 -->
+            <div class="date-range">
+                <div class="date-picker">
+                    <input type="date" id="startDate" placeholder="创建开始">
+                    <span>至</span>
+                    <input type="date" id="endDate" placeholder="创建结束">
+                </div>
+            </div>
+
+            <!-- 书名搜索 -->
+            <div class="search-bookname">
+                <input type="text" id="searchInput" placeholder="书名">
+                <buttun class="img-search-btn" id="searchBtn">
+                    <img src="../image/搜索.png" alt="搜索">
+                </buttun>
+            </div>
+
+            <!-- 新增图书按钮 -->
+            <div class="create-book">
+                <button class="add-book-btn" id="openAddModal">
+                    <i class="fas fa-book"></i>新增书籍
+                </button>
+            </div>
+        </div>
+
+        <!-- 书籍列表 -->
+        <div class="book-list">
+            <div class="book-cards-container" id="bookCardsContainer"></div>
+        </div>
+
+        <!-- 分页翻页 -->
+        <div class="pagination">
+            <button class="page-btn" id="prevPage">
+                <i class="fas fa-angle-double-left">上一页</i>
+            </button>
+            <div id="pageInfo" class="page-info"></div>
+            <div class="page-numbers" id="pageNumbers"></div>
+            <button class="page-btn" id="nextPage">
+                <i class="fas fa-angle-double-right">下一页</i>
+            </button>
+        </div>
+
+        <style>
+            .page-info {
+                margin: 0 15px;
+                color: #666;
+                line-height: 32px;
+            }
+        </style>
+
+        <!-- 新增/编辑图书界面 -->
+        <div id="bookModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeModal">&times;</span>
+                <h3 id="modalTitle">新增书籍</h3>
+
+                <form id="bookForm">
+                    <input type="hidden" id="bookId">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookName">书籍名称</label>
+                            <input type="text" id="bookName" name="bookName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="author">作者</label>
+                            <input type="text" id="author" name="author" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="quantity">库存数量</label>
+                            <input type="number" id="quantity" name="quantity" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="type">书籍类型</label>
+                            <select id="type" name="type" required>
+                                <option value="">-- 请选择类型 --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="language">语言</label>
+                            <input type="text" id="language" name="language" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cover">书籍封面</label>
+                        <input type="file" id="cover" name="cover" accept="image/*">
+                        <div class="cover-preview" id="coverPreview"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">保存</button>
+                        <button type="button" class="cancel-btn" id="cancelModal">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../JS/iconbutton.js"></script>
+    <script src="../JS/bookManager.js"></script>
+</body>
+
+</html>
